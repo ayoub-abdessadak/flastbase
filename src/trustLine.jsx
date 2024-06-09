@@ -1,6 +1,8 @@
 import { Wallet, Client, } from 'xrpl';
 
-async function establishTrustline(wallet, secret, counterparty, currency, limit) {
+async function establishTrustline(wallet, secret, counterparty, currency, limit, toast) {
+  console.log(22, wallet, secret, counterparty, currency, limit, toast)
+  toast.info("requesting a trustline", {theme:"colored"})
     const net = "wss://s.altnet.rippletest.net:51233";
     const client = new Client(net)
     await client.connect()
@@ -19,6 +21,7 @@ async function establishTrustline(wallet, secret, counterparty, currency, limit)
     const ts_signed = standby_wallet.sign(ts_prepared)
     const ts_result = await client.submitAndWait(ts_signed.tx_blob)
     console.log("trustline", ts_result)
+    toast.info("trustline probably created", {theme:"colored"})
   } //End of oPcreateTrustline
 
 export default establishTrustline;

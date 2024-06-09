@@ -61,9 +61,9 @@ const customStyles = {
 function App() {
 
 
-  const [counterpartyWallet, setCounterpartyWallet] = useState();
-  const [currency, setCurrency] = useState();
-  const [limit, setLimit] = useState();
+  const [counterpartyWallet, setCounterpartyWallet] = useState("rJDHLH3Ahr5fAYFTRsCq5UtRW2sfN9GeX4");
+  const [currency, setCurrency] = useState("MFX");
+  const [limit, setLimit] = useState("100");
   const [dashOtherCoins, setDashOtherCoins] = useState();
   const [transactions, setTransActions] = useState([]);
   const [orders, setOrders] = useState([]);
@@ -79,7 +79,7 @@ function App() {
 
   const createASellOffer = () => {
     setOrders((prevOrders) => {
-      return [...prevOrders, {wallet:"somewallet", coin:"CNX", amount:100, filled:false}] 
+      return [...prevOrders, {wallet:wallet.classicAddress, coin:"CFX", amount:1, filled:false}] 
     })
   }
 
@@ -136,7 +136,7 @@ function App() {
   }
 
   const _createTrustLine = () => {
-    establishTrustline(wallet.classicAddress, wallet.seed, counterpartyWallet, currency, limit).catch(console.error);
+    establishTrustline(wallet.classicAddress, wallet.seed, counterpartyWallet, currency, limit, toast).catch(console.error);
   }
 
   const fundAccountWithFlatCoins = () => {
@@ -245,6 +245,7 @@ function App() {
       <Orders transactions={transactions} setTransActions={setTransActions} orders={orders} setOrders={setOrders} />
       <h1 style={{fontWeight:"1000", fontSize:"24px", marginBottom:"10px"}}>Trustline Creator</h1>
       <CreateTrustLine setCounterpartyWallet={setCounterpartyWallet} setCurrency={setCurrency} setLimit={setLimit} createTrustLine={_createTrustLine} />
+      <p>rJDHLH3Ahr5fAYFTRsCq5UtRW2sfN9GeX4</p>
     </div>
     <br />
     </>
