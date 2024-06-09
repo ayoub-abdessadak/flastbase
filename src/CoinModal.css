@@ -1,0 +1,14 @@
+.Modal-Parent{
+    color: black;   
+    justify-content: center;
+    width:400px;
+    height:400px;
+    display: flex;
+
+
+}
+
+input{
+    margin-right: 0;
+    margin-left: 0;
+}

@@ -1,18 +1,3 @@
-import './App.css';
-import Card from './Card';
-import DarkBG from './dark.jpeg'
-import Logo from './xrplogo.png'
-import NavBar from './NavBar';
-import CoinModal from './CoinModal';
-import ReactDOM from 'react-dom';
-import Modal from 'react-modal';
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
-import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
-import XrpLogo from "./xrp-xrp-logo.png"
-
-// Other repos
 import { Client, xrpToDrops, dropsToXrp } from "xrpl";
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
@@ -24,47 +9,11 @@ import axios from "axios";
 import CreateTrustLine from "./createTrustLine";
 import establishTrustline from "./trustLine";
 
-const responsive = {
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-    partialVisibilityGutter: 40 // this is needed to tell the amount of px that should be visible.
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
-    partialVisibilityGutter: 30 // this is needed to tell the amount of px that should be visible.
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
-    partialVisibilityGutter: 300 // this is needed to tell the amount of px that should be visible.
-  }
-}
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    display:'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgb(179, 145, 210)',
-    borderRadius: '30px'
-  },
-};
-
+// A common flow of creating a test account and sending XRP
 function App() {
-
-
   const [counterpartyWallet, setCounterpartyWallet] = useState();
   const [currency, setCurrency] = useState();
   const [limit, setLimit] = useState();
-  const [dashOtherCoins, setDashOtherCoins] = useState();
   const [transactions, setTransActions] = useState([]);
   const [orders, setOrders] = useState([]);
   const getFlatCoinsUrl = "http://0.0.0.0:8000/api/v1/coins/flat/79fce996-76db-4c21-a54b-32b2f7788cff/faucet"
@@ -75,7 +24,6 @@ function App() {
     "Wait for the wallet to be funded..."
   );
   const [statusText, setStatusText] = useState("");
-
 
   const createASellOffer = () => {
     setOrders((prevOrders) => {
@@ -151,83 +99,12 @@ function App() {
     .catch((response)=>console.log(response))
   }
 
-  let subtitle;
-
-  const [modalIsOpen, setIsOpen] = React.useState(false);
-
-  const [swapChosen, setSwapChosen] = useState('');
-
-
-  function openModal() {
-    setIsOpen(true);
-  }
-
-  function afterOpenModal() {
-
-  }
-
-  function closeModal() {
-    setIsOpen(false);
-  }
-
-
   return (
-    <>
-    <ToastContainer />
-      <img src={DarkBG} style={{zIndex:'-100', width:'100vw', height:'60%', position:'absolute'}}></img>
-      <Modal
-        style={customStyles}
-        isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        contentLabel="Example Modal"
-      >
-        <CoinModal boolean={swapChosen}></CoinModal>
-      </Modal>
-
-    <Carousel partialVisible={true} responsive={responsive}>
-      <div className='RippleAmountParent' style={{color:'white'}}>
-      <h1>{balance}</h1>
-      <img style={{width:'50px', height:'50px', margin: '20px', color:'white'}} src={XrpLogo}></img>
-    </div>
-    {dashOtherCoins ? dashOtherCoins : null}
-  </Carousel>
-
-    <div className="App"> 
-          <Carousel partialVisible={true} responsive={responsive}>
-            <div className='RippleAmountParent'>
-            <h1>2737738.92</h1>
-            <img style={{width:'50px', height:'50px', margin: '20px'}} src={Logo}></img>
-          </div>
-          <div className='RippleAmountParent'>
-            <h1>2737738.92</h1>
-            <img style={{width:'50px', height:'50px', margin: '20px'}} src={Logo}></img>
-          </div>
-          <div className='RippleAmountParent'>
-            <h1>2737738.92</h1>
-            <img style={{width:'50px', height:'50px', margin: '20px'}} src={Logo}></img>
-          </div>
-        </Carousel>
-    {
-      wallet ? <WalletListener setBalance={setBalance} wallet={wallet} setDashOtherCoins={setDashOtherCoins}  /> : null
-    }
-    <Card walletAdress={wallet ? wallet.classicAddress : "wallet is being created"}></Card> 
-    <div className='TokenRows'>
-
-    <div onClick={createASellOffer} className='Block1'>
-    <h2>Swap</h2>
-    </div>
-
-
-    <div onClick={sendPayment} className='Block1'>
-    <h2>Sell</h2>
-    </div>
-
-    </div>
-    </div>
-    <div className='container'>
-
-      {/* <div style={{display:"flex", flexWrap:"wrap", columnGap:"10px"}}>
+    <div className="container">
+      <ToastContainer />
+      {
+        wallet ? <WalletListener setBalance={setBalance} wallet={wallet}  /> : null
+      }
       {
         balance > 0  ? <button className="btn btn-primary" onClick={sendPayment}>{paymentButtonText}</button> : "setting up a demo wallet one moment"
       }
@@ -240,15 +117,19 @@ function App() {
         :
         null
       }
-      </div> */}
-      <br />
+      <p>
+        <i>{statusText}</i>
+      </p>
+      <br></br>
       <Orders transactions={transactions} setTransActions={setTransActions} orders={orders} setOrders={setOrders} />
+      <br></br>
+      <hr></hr>
+      <br></br>
       <h1 style={{fontWeight:"1000", fontSize:"24px", marginBottom:"10px"}}>Trustline Creator</h1>
       <CreateTrustLine setCounterpartyWallet={setCounterpartyWallet} setCurrency={setCurrency} setLimit={setLimit} createTrustLine={_createTrustLine} />
     </div>
-    <br />
-    </>
   );
 }
 
+// Search xrpl.org for docs on transactions + requests you can do!
 export default App;
